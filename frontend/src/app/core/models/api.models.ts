@@ -5,6 +5,11 @@ export interface ResourceConfig {
   endpoint: string;
   fields: FieldConfig[];
   columns: string[];
+  columnLabels?: Record<string, string>;
+  moneyFields?: string[];
+  titleField?: string;
+  subtitleField?: string;
+  createLabel?: string;
 }
 
 export interface FieldConfig {

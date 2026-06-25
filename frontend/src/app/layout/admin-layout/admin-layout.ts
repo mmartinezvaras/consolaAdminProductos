@@ -22,6 +22,7 @@ export class AdminLayout {
     { label: 'Dashboard', path: '/dashboard', icon: 'pi pi-chart-line' },
     { label: 'Productos', path: '/products', icon: 'pi pi-box' },
     { label: 'Ventas', path: '/sales', icon: 'pi pi-wallet' },
+    { label: 'Gastos', path: '/expenses', icon: 'pi pi-receipt' },
     { label: 'Tiendas', path: '/suppliers', icon: 'pi pi-truck' },
     { label: 'Existencias', path: '/inventory', icon: 'pi pi-warehouse' },
     { label: 'Estimacion', path: '/profitability', icon: 'pi pi-calculator' }

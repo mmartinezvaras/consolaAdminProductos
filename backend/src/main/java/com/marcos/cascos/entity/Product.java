@@ -48,6 +48,12 @@ public class Product {
     @Column(name = "usual_purchase_price", precision = 10, scale = 2, nullable = false)
     private BigDecimal usualPurchasePrice;
 
+    @Column(name = "purchase_shipping_cost", precision = 10, scale = 2, nullable = false)
+    private BigDecimal purchaseShippingCost;
+
+    @Column(name = "other_purchase_costs", precision = 10, scale = 2, nullable = false)
+    private BigDecimal otherPurchaseCosts;
+
     @Column(name = "recommended_sale_price", precision = 10, scale = 2, nullable = false)
     private BigDecimal recommendedSalePrice;
 
@@ -166,6 +172,22 @@ public class Product {
 
     public void setUsualPurchasePrice(BigDecimal usualPurchasePrice) {
         this.usualPurchasePrice = usualPurchasePrice;
+    }
+
+    public BigDecimal getPurchaseShippingCost() {
+        return purchaseShippingCost;
+    }
+
+    public void setPurchaseShippingCost(BigDecimal purchaseShippingCost) {
+        this.purchaseShippingCost = purchaseShippingCost;
+    }
+
+    public BigDecimal getOtherPurchaseCosts() {
+        return otherPurchaseCosts;
+    }
+
+    public void setOtherPurchaseCosts(BigDecimal otherPurchaseCosts) {
+        this.otherPurchaseCosts = otherPurchaseCosts;
     }
 
     public BigDecimal getRecommendedSalePrice() {

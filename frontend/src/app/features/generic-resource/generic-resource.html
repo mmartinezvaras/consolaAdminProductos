@@ -4,101 +4,123 @@
       <h1>{{ config.title }}</h1>
       <p>{{ config.description }}</p>
     </div>
-    <button type="button" class="secondary" (click)="load()" [disabled]="loading">
-      <i class="pi pi-refresh"></i>
-    </button>
+    <div class="header-actions">
+      <button type="button" class="secondary" (click)="load()" [disabled]="loading" aria-label="Actualizar">
+        <i class="pi pi-refresh"></i>
+      </button>
+      <button type="button" (click)="openCreate()">
+        <i class="pi pi-plus"></i>
+        {{ actionLabel() }}
+      </button>
+    </div>
   </header>
 
   <p class="alert" *ngIf="error">{{ error }}</p>
   <p class="notice" *ngIf="notice">{{ notice }}</p>
 
-  <div class="grid">
-    <form class="panel" [formGroup]="form" (ngSubmit)="save()">
-      <h2>{{ selected ? 'Editar' : 'Crear' }}</h2>
-      <label *ngFor="let field of config.fields">
-        <span>{{ field.label }}</span>
-        <textarea *ngIf="field.type === 'textarea'" [formControlName]="field.key"></textarea>
-        <select *ngIf="field.type === 'select'" [formControlName]="field.key">
-          <option value="">Seleccionar</option>
-          <option *ngFor="let option of remoteOptions[field.key]" [value]="optionValue(option, field.key)">
-            {{ optionLabel(option, field.key) }}
-          </option>
-          <option *ngFor="let option of field.options" [value]="option">{{ option }}</option>
-        </select>
-        <input *ngIf="field.type !== 'textarea' && field.type !== 'select'" [type]="field.type === 'date' ? 'datetime-local' : field.type" [formControlName]="field.key">
-      </label>
-      <div class="actions">
-        <button type="submit" [disabled]="saving">{{ saving ? 'Guardando' : 'Guardar' }}</button>
-        <button type="button" class="secondary" (click)="reset()">Limpiar</button>
-      </div>
-    </form>
+  <section class="panel records-panel">
+    <div class="table-state" *ngIf="loading">Cargando...</div>
+    <div class="table-state" *ngIf="!loading && records.length === 0">Sin registros</div>
 
-    <div class="panel table-panel">
-      <div class="table-state" *ngIf="loading">Cargando...</div>
-      <div class="table-state" *ngIf="!loading && records.length === 0">Sin registros</div>
-      <table *ngIf="!loading && records.length > 0">
-        <thead>
-          <tr>
-            <th *ngFor="let column of config.columns">{{ column }}</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <ng-container *ngFor="let record of records">
-            <tr>
-              <td *ngFor="let column of config.columns">
-                <ng-container *ngIf="isLinkValue(record[column]); else plainCell">
-                  <div class="link-actions">
-                    <a [href]="linkHref(record[column])" target="_blank" rel="noopener noreferrer">
-                      <i class="pi pi-external-link"></i>
-                    </a>
-                    <button type="button" class="icon-only secondary" (click)="copyLink(record[column])" aria-label="Copiar enlace">
-                      <i class="pi pi-copy"></i>
-                    </button>
-                  </div>
-                </ng-container>
-                <ng-template #plainCell>{{ value(record, column) }}</ng-template>
-              </td>
-              <td class="row-actions">
-                <button type="button" class="secondary" (click)="toggleDetails(record)" [attr.aria-expanded]="isExpanded(record)">
-                  <i [class]="isExpanded(record) ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
+    <div class="record-grid" *ngIf="!loading && records.length > 0">
+      <article class="record-card" *ngFor="let record of records">
+        <header class="record-head">
+          <div>
+            <span class="eyebrow">#{{ rowKey(record) }}</span>
+            <h2>{{ title(record) }}</h2>
+            <p *ngIf="subtitle(record) !== '-'">{{ subtitle(record) }}</p>
+          </div>
+          <div class="row-actions">
+            <button type="button" class="secondary" (click)="toggleDetails(record)" [attr.aria-expanded]="isExpanded(record)" aria-label="Ver informacion">
+              <i [class]="isExpanded(record) ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
+            </button>
+            <button type="button" class="secondary" (click)="edit(record)" aria-label="Editar">
+              <i class="pi pi-pencil"></i>
+            </button>
+            <button *ngIf="config.key === 'sales'" type="button" class="secondary" (click)="status(record, 'COMPLETED')">Completar</button>
+            <button *ngIf="config.key !== 'inventory'" type="button" class="danger" (click)="remove(record)" aria-label="Eliminar">
+              <i class="pi pi-trash"></i>
+            </button>
+          </div>
+        </header>
+
+        <div class="record-facts">
+          <div *ngFor="let key of visibleKeys(record)">
+            <span>{{ labelFor(key) }}</span>
+            <ng-container *ngIf="isLinkValue(record[key]); else cardText">
+              <div class="link-actions">
+                <a [href]="linkHref(record[key])" target="_blank" rel="noopener noreferrer">
+                  <i class="pi pi-external-link"></i>
+                  Abrir
+                </a>
+                <button type="button" class="icon-only secondary" (click)="copyLink(record[key])" aria-label="Copiar enlace">
+                  <i class="pi pi-copy"></i>
                 </button>
-                <button type="button" class="secondary" (click)="edit(record)"><i class="pi pi-pencil"></i></button>
-                <button *ngIf="config.key === 'purchases'" type="button" class="secondary" (click)="status(record, 'RECEIVED')">Recibida</button>
-                <button *ngIf="config.key === 'sales'" type="button" class="secondary" (click)="status(record, 'COMPLETED')">Completar</button>
-                <button *ngIf="config.key !== 'inventory'" type="button" class="danger" (click)="remove(record)"><i class="pi pi-trash"></i></button>
-              </td>
-            </tr>
-            <tr class="details-row" *ngIf="isExpanded(record)">
-              <td [attr.colspan]="config.columns.length + 1">
-                <div class="details-grid">
-                  <article *ngFor="let key of detailKeys(record)">
-                    <span>{{ key }}</span>
-                    <ng-container *ngIf="isLinkValue(record[key]); else detailText">
-                      <div class="detail-link">
-                        <strong>{{ value(record, key) }}</strong>
-                        <div class="link-actions">
-                          <a [href]="linkHref(record[key])" target="_blank" rel="noopener noreferrer">
-                            <i class="pi pi-external-link"></i>
-                            Abrir
-                          </a>
-                          <button type="button" class="secondary" (click)="copyLink(record[key])">
-                            <i class="pi pi-copy"></i>
-                            Copiar
-                          </button>
-                        </div>
-                      </div>
-                    </ng-container>
-                    <ng-template #detailText>
-                      <strong>{{ value(record, key) }}</strong>
-                    </ng-template>
-                  </article>
+              </div>
+            </ng-container>
+            <ng-template #cardText>
+              <strong>{{ value(record, key) }}</strong>
+            </ng-template>
+          </div>
+        </div>
+
+        <div class="details-grid" *ngIf="isExpanded(record)">
+          <article *ngFor="let key of detailKeys(record)">
+            <span>{{ labelFor(key) }}</span>
+            <ng-container *ngIf="isLinkValue(record[key]); else detailText">
+              <div class="detail-link">
+                <strong>{{ value(record, key) }}</strong>
+                <div class="link-actions">
+                  <a [href]="linkHref(record[key])" target="_blank" rel="noopener noreferrer">
+                    <i class="pi pi-external-link"></i>
+                    Abrir
+                  </a>
+                  <button type="button" class="secondary" (click)="copyLink(record[key])">
+                    <i class="pi pi-copy"></i>
+                    Copiar
+                  </button>
                 </div>
-              </td>
-            </tr>
-          </ng-container>
-        </tbody>
-      </table>
+              </div>
+            </ng-container>
+            <ng-template #detailText>
+              <strong>{{ value(record, key) }}</strong>
+            </ng-template>
+          </article>
+        </div>
+      </article>
     </div>
+  </section>
+
+  <div class="modal-backdrop" *ngIf="modalOpen" (click)="closeModal()">
+    <section class="modal panel" (click)="$event.stopPropagation()">
+      <header class="modal-head">
+        <div>
+          <h2>{{ selected ? 'Editar' : actionLabel() }}</h2>
+          <p>{{ selected ? 'Actualiza los datos y guarda los cambios.' : 'Rellena los datos principales.' }}</p>
+        </div>
+        <button type="button" class="secondary icon-only" (click)="closeModal()" aria-label="Cerrar">
+          <i class="pi pi-times"></i>
+        </button>
+      </header>
+
+      <form [formGroup]="form" (ngSubmit)="save()">
+        <label *ngFor="let field of config.fields">
+          <span>{{ field.label }}</span>
+          <textarea *ngIf="field.type === 'textarea'" [formControlName]="field.key"></textarea>
+          <select *ngIf="field.type === 'select'" [formControlName]="field.key">
+            <option value="">Seleccionar</option>
+            <option *ngFor="let option of remoteOptions[field.key]" [value]="optionValue(option, field.key)">
+              {{ optionLabel(option, field.key) }}
+            </option>
+            <option *ngFor="let option of field.options" [value]="option">{{ staticOptionLabel(field.key, option) }}</option>
+          </select>
+          <input *ngIf="field.type !== 'textarea' && field.type !== 'select'" [type]="field.type === 'date' ? 'datetime-local' : field.type" [formControlName]="field.key">
+        </label>
+        <div class="actions">
+          <button type="submit" [disabled]="saving">{{ saving ? 'Guardando' : 'Guardar' }}</button>
+          <button type="button" class="secondary" (click)="closeModal()">Cancelar</button>
+        </div>
+      </form>
+    </section>
   </div>
 </section>

@@ -34,6 +34,12 @@ public class ProductCreateRequest {
     private BigDecimal usualPurchasePrice;
 
     @DecimalMin("0.00")
+    private BigDecimal purchaseShippingCost;
+
+    @DecimalMin("0.00")
+    private BigDecimal otherPurchaseCosts;
+
+    @DecimalMin("0.00")
     private BigDecimal recommendedSalePrice;
 
     @Min(0)
@@ -68,6 +74,10 @@ public class ProductCreateRequest {
     public void setColor(String color) { this.color = color; }
     public BigDecimal getUsualPurchasePrice() { return usualPurchasePrice; }
     public void setUsualPurchasePrice(BigDecimal usualPurchasePrice) { this.usualPurchasePrice = usualPurchasePrice; }
+    public BigDecimal getPurchaseShippingCost() { return purchaseShippingCost; }
+    public void setPurchaseShippingCost(BigDecimal purchaseShippingCost) { this.purchaseShippingCost = purchaseShippingCost; }
+    public BigDecimal getOtherPurchaseCosts() { return otherPurchaseCosts; }
+    public void setOtherPurchaseCosts(BigDecimal otherPurchaseCosts) { this.otherPurchaseCosts = otherPurchaseCosts; }
     public BigDecimal getRecommendedSalePrice() { return recommendedSalePrice; }
     public void setRecommendedSalePrice(BigDecimal recommendedSalePrice) { this.recommendedSalePrice = recommendedSalePrice; }
     public Integer getCurrentStock() { return currentStock; }

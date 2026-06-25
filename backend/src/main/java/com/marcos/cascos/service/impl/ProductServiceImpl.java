@@ -118,6 +118,8 @@ public class ProductServiceImpl implements ProductService {
 
     private void validateBusinessRules(ProductCreateRequest request) {
         assertNonNegative(request.getUsualPurchasePrice(), "usualPurchasePrice cannot be negative");
+        assertNonNegative(request.getPurchaseShippingCost(), "purchaseShippingCost cannot be negative");
+        assertNonNegative(request.getOtherPurchaseCosts(), "otherPurchaseCosts cannot be negative");
         assertNonNegative(request.getRecommendedSalePrice(), "recommendedSalePrice cannot be negative");
         int currentStock = valueOrZero(request.getCurrentStock());
         int reservedStock = valueOrZero(request.getReservedStock());

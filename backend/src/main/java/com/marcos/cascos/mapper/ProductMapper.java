@@ -31,7 +31,11 @@ public class ProductMapper {
         product.setSerialNumber(normalizeBlank(request.getSerialNumber()));
         product.setColor(defaultText(request.getColor(), "Sin color"));
         BigDecimal purchasePrice = request.getUsualPurchasePrice() != null ? request.getUsualPurchasePrice() : BigDecimal.ZERO;
+        BigDecimal shippingCost = request.getPurchaseShippingCost() != null ? request.getPurchaseShippingCost() : BigDecimal.ZERO;
+        BigDecimal otherCosts = request.getOtherPurchaseCosts() != null ? request.getOtherPurchaseCosts() : BigDecimal.ZERO;
         product.setUsualPurchasePrice(purchasePrice);
+        product.setPurchaseShippingCost(shippingCost);
+        product.setOtherPurchaseCosts(otherCosts);
         product.setRecommendedSalePrice(request.getRecommendedSalePrice() != null ? request.getRecommendedSalePrice() : purchasePrice);
         product.setCurrentStock(request.getCurrentStock() != null ? request.getCurrentStock() : 0);
         product.setReservedStock(request.getReservedStock() != null ? request.getReservedStock() : 0);
@@ -57,6 +61,9 @@ public class ProductMapper {
         response.setSerialNumber(product.getSerialNumber());
         response.setColor(product.getColor());
         response.setUsualPurchasePrice(product.getUsualPurchasePrice());
+        response.setPurchaseShippingCost(product.getPurchaseShippingCost());
+        response.setOtherPurchaseCosts(product.getOtherPurchaseCosts());
+        response.setTotalPurchaseCost(totalPurchaseCost(product));
         response.setRecommendedSalePrice(product.getRecommendedSalePrice());
         response.setCurrentStock(product.getCurrentStock());
         response.setReservedStock(product.getReservedStock());
@@ -74,5 +81,15 @@ public class ProductMapper {
 
     private String defaultText(String value, String fallback) {
         return value == null || value.isBlank() ? fallback : value.trim();
+    }
+
+    private BigDecimal totalPurchaseCost(Product product) {
+        return zero(product.getUsualPurchasePrice())
+                .add(zero(product.getPurchaseShippingCost()))
+                .add(zero(product.getOtherPurchaseCosts()));
+    }
+
+    private BigDecimal zero(BigDecimal value) {
+        return value == null ? BigDecimal.ZERO : value;
     }
 }

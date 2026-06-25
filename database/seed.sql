@@ -35,6 +35,8 @@ CREATE TABLE IF NOT EXISTS products (
   serial_number VARCHAR(100) NULL,
   color VARCHAR(100) NOT NULL,
   usual_purchase_price DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+  purchase_shipping_cost DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+  other_purchase_costs DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
   recommended_sale_price DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
   current_stock INT NOT NULL DEFAULT 0,
   reserved_stock INT NOT NULL DEFAULT 0,

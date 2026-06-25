@@ -15,6 +15,9 @@ public class ProductResponse {
     private String serialNumber;
     private String color;
     private BigDecimal usualPurchasePrice;
+    private BigDecimal purchaseShippingCost;
+    private BigDecimal otherPurchaseCosts;
+    private BigDecimal totalPurchaseCost;
     private BigDecimal recommendedSalePrice;
     private Integer currentStock;
     private Integer reservedStock;
@@ -46,6 +49,12 @@ public class ProductResponse {
     public void setColor(String color) { this.color = color; }
     public BigDecimal getUsualPurchasePrice() { return usualPurchasePrice; }
     public void setUsualPurchasePrice(BigDecimal usualPurchasePrice) { this.usualPurchasePrice = usualPurchasePrice; }
+    public BigDecimal getPurchaseShippingCost() { return purchaseShippingCost; }
+    public void setPurchaseShippingCost(BigDecimal purchaseShippingCost) { this.purchaseShippingCost = purchaseShippingCost; }
+    public BigDecimal getOtherPurchaseCosts() { return otherPurchaseCosts; }
+    public void setOtherPurchaseCosts(BigDecimal otherPurchaseCosts) { this.otherPurchaseCosts = otherPurchaseCosts; }
+    public BigDecimal getTotalPurchaseCost() { return totalPurchaseCost; }
+    public void setTotalPurchaseCost(BigDecimal totalPurchaseCost) { this.totalPurchaseCost = totalPurchaseCost; }
     public BigDecimal getRecommendedSalePrice() { return recommendedSalePrice; }
     public void setRecommendedSalePrice(BigDecimal recommendedSalePrice) { this.recommendedSalePrice = recommendedSalePrice; }
     public Integer getCurrentStock() { return currentStock; }

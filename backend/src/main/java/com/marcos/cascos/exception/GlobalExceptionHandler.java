@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -33,6 +34,11 @@ public class GlobalExceptionHandler {
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
                 .collect(Collectors.joining("; "));
         return build(HttpStatus.BAD_REQUEST, message, request.getRequestURI());
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidBody(HttpMessageNotReadableException ex, HttpServletRequest request) {
+        return build(HttpStatus.BAD_REQUEST, "Datos invalidos. Revisa categoria, importe y fecha.", request.getRequestURI());
     }
 
     private ResponseEntity<ErrorResponse> build(HttpStatus status, String message, String path) {
