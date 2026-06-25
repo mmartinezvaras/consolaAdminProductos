@@ -1,0 +1,54 @@
+<section class="page">
+  <header class="page-header">
+    <div>
+      <h1>Estimacion de rentabilidad</h1>
+      <p>Calcula si una compra merece la pena con los datos justos.</p>
+    </div>
+  </header>
+  <p class="alert" *ngIf="error">{{ error }}</p>
+  <div class="grid">
+    <form class="panel" [formGroup]="form">
+      <label><span>Producto ID</span><input type="number" formControlName="productId"></label>
+      <label><span>Unidades a comprar</span><input type="number" formControlName="units"></label>
+      <label><span>Precio compra unidad</span><input type="number" formControlName="unitPurchasePrice"></label>
+      <label><span>Envio</span><input type="number" formControlName="purchaseShippingCost"></label>
+      <label><span>Precio venta unidad</span><input type="number" formControlName="estimatedUnitSalePrice"></label>
+      <div class="actions">
+        <button type="button" (click)="calculate(false)">Calcular</button>
+        <button type="button" class="secondary" (click)="calculate(true)">Guardar</button>
+      </div>
+    </form>
+    <section class="panel">
+      <h2>Resultado</h2>
+      <div class="result-grid" *ngIf="result; else emptyResult">
+        <article>
+          <span>Inversion</span>
+          <strong>{{ metric('totalInvestment') }}</strong>
+        </article>
+        <article>
+          <span>Ingreso estimado</span>
+          <strong>{{ metric('estimatedIncome') }}</strong>
+        </article>
+        <article>
+          <span>Beneficio</span>
+          <strong>{{ metric('estimatedProfit') }}</strong>
+        </article>
+        <article>
+          <span>Beneficio unidad</span>
+          <strong>{{ metric('profitPerUnit') }}</strong>
+        </article>
+        <article>
+          <span>ROI</span>
+          <strong>{{ metric('roiPercentage') }}%</strong>
+        </article>
+        <article>
+          <span>Precio minimo venta</span>
+          <strong>{{ metric('breakEvenPrice') }}</strong>
+        </article>
+      </div>
+      <ng-template #emptyResult>
+        <div class="table-state">Introduce los datos y pulsa calcular.</div>
+      </ng-template>
+    </section>
+  </div>
+</section>

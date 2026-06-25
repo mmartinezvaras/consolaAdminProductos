@@ -1,0 +1,31 @@
+<div class="shell" [class.menu-open]="menuOpen">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-mark">C</span>
+      <div>
+        <strong>Cascos</strong>
+        <small>Inventario y ventas</small>
+      </div>
+    </div>
+    <nav>
+      <a *ngFor="let item of navItems" [routerLink]="item.path" routerLinkActive="active" (click)="menuOpen = false">
+        <i [class]="item.icon"></i>
+        <span>{{ item.label }}</span>
+      </a>
+    </nav>
+  </aside>
+  <main class="workspace">
+    <header class="topbar">
+      <button type="button" class="icon-button" (click)="menuOpen = !menuOpen" aria-label="Abrir menu">
+        <i class="pi pi-bars"></i>
+      </button>
+      <div>
+        <strong>Gestor de productos</strong>
+        <small>Dashboard, stock, tiendas y ventas</small>
+      </div>
+    </header>
+    <section class="content">
+      <router-outlet />
+    </section>
+  </main>
+</div>

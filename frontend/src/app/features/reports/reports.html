@@ -1,0 +1,13 @@
+<section class="dashboard">
+  <header>
+    <h1>Informes</h1>
+    <p>Consulta consolidada de ingresos, gastos y beneficios desde la API.</p>
+  </header>
+  <button type="button" (click)="load()">Generar informe</button>
+  <section class="charts" *ngIf="data">
+    <section>
+      <h2>Resumen</h2>
+      <pre>{{ data | json }}</pre>
+    </section>
+  </section>
+</section>

@@ -1,0 +1,24 @@
+<section class="dashboard">
+  <header>
+    <h1>Dashboard</h1>
+    <p>Resumen financiero, stock y actividad reciente.</p>
+  </header>
+  <p class="alert" *ngIf="error">{{ error }}</p>
+  <div class="cards" *ngIf="summary">
+    <article><span>Stock</span><strong>{{ summary.totalStockUnits }}</strong></article>
+    <article><span>Valor inventario</span><strong>{{ summary.inventoryValue | currency:'EUR' }}</strong></article>
+    <article><span>Ingresos</span><strong>{{ summary.totalIncome | currency:'EUR' }}</strong></article>
+    <article><span>Gastos</span><strong>{{ summary.totalExpenses | currency:'EUR' }}</strong></article>
+    <article><span>Beneficio bruto</span><strong>{{ summary.grossProfit | currency:'EUR' }}</strong></article>
+    <article><span>Beneficio neto</span><strong>{{ summary.netProfit | currency:'EUR' }}</strong></article>
+    <article><span>Ventas</span><strong>{{ summary.totalSales }}</strong></article>
+    <article><span>Compras pendientes</span><strong>{{ summary.pendingPurchases }}</strong></article>
+    <article><span>Stock bajo</span><strong>{{ summary.lowStockProducts }}</strong></article>
+  </div>
+  <div class="charts">
+    <section *ngFor="let item of charts | keyvalue">
+      <h2>{{ item.key.replace('/dashboard/charts/', '') }}</h2>
+      <pre>{{ item.value | json }}</pre>
+    </section>
+  </div>
+</section>
