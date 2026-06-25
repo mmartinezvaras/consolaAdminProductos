@@ -17,6 +17,7 @@ interface NavItem {
 })
 export class AdminLayout {
   menuOpen = false;
+  darkMode = false;
   readonly navItems: NavItem[] = [
     { label: 'Dashboard', path: '/dashboard', icon: 'pi pi-chart-line' },
     { label: 'Productos', path: '/products', icon: 'pi pi-box' },
@@ -25,4 +26,20 @@ export class AdminLayout {
     { label: 'Existencias', path: '/inventory', icon: 'pi pi-warehouse' },
     { label: 'Estimacion', path: '/profitability', icon: 'pi pi-calculator' }
   ];
+
+  constructor() {
+    const storedTheme = localStorage.getItem('theme');
+    this.darkMode = storedTheme ? storedTheme === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+    this.applyTheme();
+  }
+
+  toggleTheme(): void {
+    this.darkMode = !this.darkMode;
+    localStorage.setItem('theme', this.darkMode ? 'dark' : 'light');
+    this.applyTheme();
+  }
+
+  private applyTheme(): void {
+    document.body.classList.toggle('theme-dark', this.darkMode);
+  }
 }

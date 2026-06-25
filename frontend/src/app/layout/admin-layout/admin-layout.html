@@ -16,13 +16,19 @@
   </aside>
   <main class="workspace">
     <header class="topbar">
-      <button type="button" class="icon-button" (click)="menuOpen = !menuOpen" aria-label="Abrir menu">
-        <i class="pi pi-bars"></i>
-      </button>
-      <div>
-        <strong>Gestor de productos</strong>
-        <small>Dashboard, stock, tiendas y ventas</small>
+      <div class="topbar-title">
+        <button type="button" class="icon-button" (click)="menuOpen = !menuOpen" aria-label="Abrir menu">
+          <i class="pi pi-bars"></i>
+        </button>
+        <div>
+          <strong>Gestor de productos</strong>
+          <small>Dashboard, stock, tiendas y ventas</small>
+        </div>
       </div>
+      <button type="button" class="theme-button" (click)="toggleTheme()" [attr.aria-label]="darkMode ? 'Activar modo claro' : 'Activar modo oscuro'">
+        <i [class]="darkMode ? 'pi pi-sun' : 'pi pi-moon'"></i>
+        <span>{{ darkMode ? 'Claro' : 'Oscuro' }}</span>
+      </button>
     </header>
     <section class="content">
       <router-outlet />

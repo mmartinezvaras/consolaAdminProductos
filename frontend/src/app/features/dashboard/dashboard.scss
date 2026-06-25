@@ -1,29 +1,41 @@
 .dashboard {
   display: grid;
-  gap: 18px;
+  gap: 20px;
 }
 
 h1, h2, p {
   margin: 0;
 }
 
+h1 {
+  font-size: 30px;
+  line-height: 1.1;
+}
+
+header p {
+  margin-top: 6px;
+  color: var(--muted);
+}
+
 .cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 12px;
+  gap: 14px;
 }
 
 article, .charts section {
-  background: #ffffff;
-  border: 1px solid #d9e2ec;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 8px;
-  padding: 16px;
+  padding: 18px;
+  box-shadow: var(--shadow);
 }
 
 article span {
-  color: #64748b;
+  color: var(--muted);
   display: block;
   font-size: 13px;
+  font-weight: 750;
 }
 
 article strong {
@@ -35,18 +47,18 @@ article strong {
 .charts {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 12px;
+  gap: 14px;
 }
 
 pre {
   white-space: pre-wrap;
-  color: #475569;
+  color: var(--muted);
   font-size: 12px;
 }
 
 .alert {
-  background: #fee2e2;
-  color: #991b1b;
+  background: var(--error-bg);
+  color: var(--error-text);
   padding: 10px 12px;
   border-radius: 8px;
 }
